@@ -29,11 +29,12 @@ import com.chaofan.test.Container;
 import com.chaofan.test.ContainerTest3;
 import com.chaofan.test.DynameicControl;
 import com.chaofan.test.Producer;
+import com.chaofan.test.Role;
 import com.chaofan.test.TillStatus;
 
 public class MyPanel extends JPanel implements Runnable, ActionListener{
 	
-	Image cartImage, tillImage;
+	Image cartImage, tillImage, basketImage;
 	Icon stopImage;
 	
 	ExecutorService service;
@@ -68,7 +69,7 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 		containers = new Vector<Container>();
 		addContainers();
 		producer = new Producer(containers, 1, configuration);
-		consumers = new Vector<Consumer>(configuration.getInitTills());
+		consumers = new Vector<Consumer>(configuration.getMaxiumOfTill());
 		addConsumer();
 //		new Thread(producer).start();
 		dc = new DynameicControl(containers, configuration, service, timeConsumationOfConsumer, consumers);
@@ -79,16 +80,26 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 		cartImage = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/resource/cart1.png"));
 		stopImage = new ImageIcon("/resource/funny.jpg");
 		tillImage = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/resource/till.jpg")); 
+		basketImage = Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/resource/basket.png")); 
 		
 	}
 	
 	public void addConsumer() {
-		for(int i=0;i<configuration.getInitTills();i++) {
-			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening);
+		for(int i=0;i<configuration.getRestrictiveTills();i++) {
+			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, Role.restrictive);
+			containers.get(i).setRole(Role.restrictive);
 			consumers.add(consumer);
-//			till.start();
 		}
-//		System.out.println("size of comsumers is"+ consumers.size());
+		for(int i=configuration.getRestrictiveTills();i<configuration.getInitTills();i++) {
+			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, Role.general);
+			containers.get(i).setRole(Role.general);
+			consumers.add(consumer);
+		}
+		for(int i=configuration.getInitTills(); i<configuration.getMaxiumOfTill(); i++) {
+			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.closing);
+			consumers.add(consumer);
+		}
+			
 	}
 	
 	
@@ -97,14 +108,16 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 		lostConsumer = service.submit(producer);
 		for(int i=0;i<configuration.getInitTills();i++) {
 //			service.execute(consumers.get(i));
-			timeConsumationOfConsumer.add(service.submit(consumers.get(i)));
+			if(containers.get(i).getTillStatus()==TillStatus.opening) {
+				timeConsumationOfConsumer.add(service.submit(consumers.get(i)));
+			}
 		}
 		
-		service.execute(dc);
+//		service.execute(dc);
 	}
 	
 	public void addContainers() {
-		for(int i=0;i<configuration.getInitTills();i++) {
+		for(int i=0;i<configuration.getMaxiumOfTill();i++) {
 			containers.add(new ContainerTest3(configuration.getSizeOfEachTill()));
 		}
 	}
@@ -117,12 +130,15 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 			int temp = containers.get(i).getList().size();
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
 			for(int j=0;j< temp;j++) {
-				g.drawImage(cartImage, 90+j*50, 30+i*80, 60, 60, this);
+				if(containers.get(i).getRole()==Role.restrictive) {
+					
+					g.drawImage(basketImage, 90+j*50, 30+i*80, 60, 60, this);
+				}
+				else {
+					g.drawImage(cartImage, 90+j*50, 30+i*80, 60, 60, this);
+					
+				}
 				g.setColor(Color.WHITE);
-//				if(j==0) {
-//					cart = containers.get(i).getList().get(j);
-//					g.drawString(cart.getNumber()+"", 110+j*50, 40+i*80);
-//				}
 				cart = containers.get(i).getList().get(j);
 				g.drawString(cart.getNumber()+"", 110+j*50, 40+i*80);
 			}
@@ -131,7 +147,7 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 	
 	public void drawTill(Graphics g) {
 		g.setColor(Color.WHITE);
-		for(int i=0;i<configuration.getInitTills();i++) {
+		for(int i=0;i<configuration.getMaxiumOfTill();i++) {
 			g.drawLine(30, 20+80*i, 500, 20+80*i);
 			g.drawImage(tillImage, 30, 30+80*i,60,60,this);
 			g.drawLine(30, 100+80*i, 500, 100+80*i);

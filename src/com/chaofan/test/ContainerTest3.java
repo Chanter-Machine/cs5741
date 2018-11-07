@@ -17,7 +17,7 @@ public class ContainerTest3 implements Container {
 	Condition notFull;
 	Condition notEmpty;
 	TillStatus tillStatus;
-
+	Role role;
 	public ContainerTest3(int size) {
 		li = new ArrayList<Cart>(size);
 		list = Collections.synchronizedList(li);
@@ -26,6 +26,18 @@ public class ContainerTest3 implements Container {
 		notFull = lock.newCondition();
 		tillStatus = TillStatus.opening;
 	}
+	
+	public Role getRole() {
+		return role;
+	}
+
+
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+
 
 	public TillStatus getTillStatus() {
 		return tillStatus;

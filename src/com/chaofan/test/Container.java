@@ -11,4 +11,6 @@ public interface Container {
 	public Condition getNotEmpty();
 	public TillStatus getTillStatus();
 	public void setTillStatus(TillStatus tillStatus);
+	public Role getRole();
+	public void setRole(Role role);
 }

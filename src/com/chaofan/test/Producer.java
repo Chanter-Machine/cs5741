@@ -36,16 +36,16 @@ public class Producer implements /*Runnable*/ Callable<Integer>{
 		sumOfCustomer ++;
 		int index ;
 		if(cart.getNumber()<=configuration.getRestrictiveNum()) {
-//			System.out.println("end input"+(configuration.getRestrictiveTills()-1));
-			index = countNumInTills(0, configuration.getRestrictiveTills()-1);
+//			index = countNumInTills(0, configuration.getRestrictiveTills()-1);
+			index =findTill2Put(Role.restrictive, cart.getNumber());
 		}
 		else {
-			index = countNumInTills(configuration.getRestrictiveTills(), containers.size()-1);
+//			index = countNumInTills(configuration.getRestrictiveTills(), containers.size()-1);
+			index = findTill2Put(Role.general, cart.getNumber());
 		}
 		if(index!=-1) {
-//			
 			containers.get(index).put(cart);
-//			System.out.println("put "+cart.getNumber()+" to cart"+index );
+//			System.out.println("put "+cart.getNumber()+" to "+ index);
 		}
 		else {
 			sumOfLostCustomer++;
@@ -74,20 +74,40 @@ public class Producer implements /*Runnable*/ Callable<Integer>{
 		return index;
 	}
 	
+	public int findTill2Put(Role role,int num) {
+		int index=0;
+		int min=200;
+		for(int i=0;i<configuration.getMaxiumOfTill();i++) {
+			if(containers.get(i).getTillStatus()==TillStatus.opening  && role==containers.get(i).getRole()) {
+				if(min>containers.get(i).getList().size()) {
+//					System.out.println("num = "+num+"");
+					index=i;
+					min=containers.get(i).getList().size();
+//					System.out.println("genereal "+ num);
+				}
+			}
+//			else if(containers.get(i).getTillStatus()==TillStatus.opening  && role==containers.get(i).getRole()) {
+//				if(min>containers.get(i).getList().size()) {
+//					index=i;
+//					min=containers.get(i).getList().size();
+////					System.out.println("restrctive "+ num);
+//				}
+//			}
+		}
+		if(containers.get(index).getList().size()==configuration.getSizeOfEachTill()) {
+			return -1;
+		}
+		else{
+			System.out.println("role: "+ role+ " index = "+index+" num = " +num);
+			return index;
+		}
+	}
+	
 
 //	@Override
 	public void run() {
 		System.out.println("Producer# "+this.id+" is running now");
-//		for(int i=0;i<100;i++) {
-//			addToVector();
-//			System.out.println("Producer#"+this.id+"put "+i);
-//			try {
-//				TimeUnit.SECONDS.sleep(configuration.getRateOfGnrtTill());
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+
 		while(switch_on) {
 			System.out.println("Producer# "+this.id+" is running now");
 			addToVector();
@@ -122,5 +142,22 @@ public class Producer implements /*Runnable*/ Callable<Integer>{
 		return sumOfLostCustomer;
 	}
 
-	
+//	@Override
+//	public Integer call() throws Exception {
+//		System.out.println("Producer is running");
+//		if(switch_on) {
+////			System.out.println("Producer# "+this.id+" is running now");
+//			addToVector();
+////			System.out.println("Producer#"+this.id+"put ");
+//			try {
+////				TimeUnit.SECONDS.sleep(configuration.getRateOfGnrtTill());
+//				TimeUnit.SECONDS.sleep(1);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//	
+//		return sumOfLostCustomer;
+//	}
 }

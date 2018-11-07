@@ -31,43 +31,43 @@ public class DynameicControl implements Runnable {
 		return totalCarts/tills;
 	}
 	
-//	public void checkNum() {
-//		numOfCartInRestrativeTills = 0;
-//		numOfCartInCommonTills = 0;
-//		int averageRestrative = 0;
-//		int averageCommon = 0;
-//		for(int i=0;i<configuration.getRestrictiveTills();i++) {
-//			numOfCartInRestrativeTills += containers.get(i).getList().size();
-//		}
-//		averageRestrative = getAverage(configuration.getRestrictiveTills(), numOfCartInRestrativeTills);
-//		if(averageRestrative >= configuration.getSizeOfEachTill()-1) {
-//			if(containers.size()<configuration.getMaxiumOfTill()) {
+	public void checkNum() {
+		numOfCartInRestrativeTills = 0;
+		numOfCartInCommonTills = 0;
+		int averageRestrative = 0;
+		int averageCommon = 0;
+		for(int i=0;i<configuration.getRestrictiveTills();i++) {
+			numOfCartInRestrativeTills += containers.get(i).getList().size();
+		}
+		averageRestrative = getAverage(configuration.getRestrictiveTills(), numOfCartInRestrativeTills);
+		if(averageRestrative >= configuration.getSizeOfEachTill()-1) {
+			if(containers.size()<configuration.getMaxiumOfTill()) {
 //				openTill(configuration.getRestrictiveTills());
-////				openTill(configuration.getInitTills());
-//				configuration.setInitTills(configuration.getInitTills()+1);
-//				configuration.setRestrictiveTills(configuration.getRestrictiveTills()+1);
-//				
-//			}
-//		}
-//		else if(configuration.getRestrictiveTills()>1 && averageRestrative< configuration.getSizeOfEachTill()/2) {
-////			System.out.println("Till "+findMinIndex(0, configuration.getRestrictiveTills())+" is closing");
-//			closeTill(findMinIndex(0, configuration.getRestrictiveTills()), "restrctive");
-//		}
-//		
-//		for(int i=configuration.getRestrictiveTills();i<configuration.getInitTills();i++) {
-//			numOfCartInCommonTills += containers.get(i).getList().size();
-//		}
-//		averageCommon = getAverage(configuration.getInitTills()-configuration.getRestrictiveTills(), numOfCartInCommonTills);
-//		if(averageCommon >= configuration.getSizeOfEachTill()-1) {
-//			if(containers.size()<configuration.getMaxiumOfTill()) {
 //				openTill(configuration.getInitTills());
-//				configuration.setInitTills(configuration.getInitTills()+1);
-//			}
-//		}
-//		else if(configuration.getInitTills()-configuration.getRestrictiveTills()>=2 && averageCommon< configuration.getSizeOfEachTill()/2) {
-//			
-//		}
-//	}
+				configuration.setInitTills(configuration.getInitTills()+1);
+				configuration.setRestrictiveTills(configuration.getRestrictiveTills()+1);
+				
+			}
+		}
+		else if(configuration.getRestrictiveTills()>1 && averageRestrative< configuration.getSizeOfEachTill()/2) {
+//			System.out.println("Till "+findMinIndex(0, configuration.getRestrictiveTills())+" is closing");
+//			closeTill(findMinIndex(0, configuration.getRestrictiveTills()), "restrctive");
+		}
+		
+		for(int i=configuration.getRestrictiveTills();i<configuration.getInitTills();i++) {
+			numOfCartInCommonTills += containers.get(i).getList().size();
+		}
+		averageCommon = getAverage(configuration.getInitTills()-configuration.getRestrictiveTills(), numOfCartInCommonTills);
+		if(averageCommon >= configuration.getSizeOfEachTill()-1) {
+			if(containers.size()<configuration.getMaxiumOfTill()) {
+//				openTill(configuration.getInitTills());
+				configuration.setInitTills(configuration.getInitTills()+1);
+			}
+		}
+		else if(configuration.getInitTills()-configuration.getRestrictiveTills()>=2 && averageCommon< configuration.getSizeOfEachTill()/2) {
+			
+		}
+	}
 	
 //	public void openTill(int index) {
 //		System.out.println("Till is opening"+index);
@@ -106,15 +106,15 @@ public class DynameicControl implements Runnable {
 	
 	@Override
 	public void run() {
-//		while(true) {
-//			try {
-//				checkNum();
-//				TimeUnit.SECONDS.sleep(3);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		while(true) {
+			try {
+				checkNum();
+				TimeUnit.SECONDS.sleep(3);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 

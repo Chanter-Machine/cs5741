@@ -74,26 +74,32 @@ public class ConfigPanel extends JPanel implements ActionListener{
 		jtf_numOfTIll = new JTextField(8);
 		jtf_numOfTIll.setLocation(300, 40);
 		jtf_numOfTIll.setSize(150, 30);
+		jtf_numOfTIll.setText("6");;
 		
 		jtf_maxTills = new JTextField(8);
 		jtf_maxTills.setLocation(300, 70);
 		jtf_maxTills.setSize(150, 30);
+		jtf_maxTills.setText("8");
 		
 		jtf_restirictionTills = new JTextField(8);
 		jtf_restirictionTills.setLocation(300, 100);
 		jtf_restirictionTills.setSize(150, 30);
+		jtf_restirictionTills.setText("3");
 		
 		jtf_cstmRate = new JTextField(8);
 		jtf_cstmRate.setLocation(300, 130);
 		jtf_cstmRate.setSize(150, 30);
+		jtf_cstmRate.setText("10");
 		
 		jtf_sizeOfEachTill = new JTextField(8);
 		jtf_sizeOfEachTill.setLocation(300, 160);
 		jtf_sizeOfEachTill.setSize(150, 30);
+		jtf_sizeOfEachTill.setText("5");
 		
 		jtf_restrativeNum = new JTextField(8);
 		jtf_restrativeNum.setLocation(300, 190);
 		jtf_restrativeNum.setSize(150, 30);
+		jtf_restrativeNum.setText("100");
 		
 		jb_confirm = new JButton("Confirm");
 		jb_confirm.setLocation(150,260);

@@ -8,15 +8,16 @@ public class Consumer implements /*Runnable,*/ Callable<Long>{
 	int id,size;
 	volatile boolean switch_on;
 	TillStatus tillStatus;
-	Role role;
+//	Role role;
 	
 	public Consumer(Container ct, int id, TillStatus tillStatus, Role role) {
 		container = ct;
 		this.id = id;
 		switch_on = true;
 		this.tillStatus = tillStatus;
-		this.role = role;
+//		this.role = role;
 	}
+	
 	public Consumer(Container ct, int id, TillStatus tillStatus) {
 		container = ct;
 		this.id = id;
@@ -25,7 +26,14 @@ public class Consumer implements /*Runnable,*/ Callable<Long>{
 //		this.role = role;
 	}
 	
-public boolean isSwitch_on() {
+//	public Role getRole() {
+//		return role;
+//	}
+//	public void setRole(Role role) {
+//		this.role = role;
+//	}	
+	
+	public boolean isSwitch_on() {
 		return switch_on;
 	}
 
