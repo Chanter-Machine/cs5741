@@ -32,7 +32,7 @@ public class MyWIndow extends JFrame implements ActionListener{
 	
 	public void setFrame() {
 		setVisible(true);
-		setSize(1000, 900);
+		setSize(1000, 700);
 		setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 	}
 	

@@ -24,20 +24,16 @@ public class ContainerTest3 implements Container {
 		this.size = size;
 		notEmpty = lock.newCondition();
 		notFull = lock.newCondition();
-		tillStatus = TillStatus.opening;
+//		tillStatus = TillStatus.opening;
 	}
 	
 	public Role getRole() {
 		return role;
 	}
 
-
-
 	public void setRole(Role role) {
 		this.role = role;
 	}
-
-
 
 	public TillStatus getTillStatus() {
 		return tillStatus;

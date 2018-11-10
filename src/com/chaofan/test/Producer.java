@@ -35,9 +35,12 @@ public class Producer implements /*Runnable*/ Callable<Integer>{
 		Cart cart = new Cart();
 		sumOfCustomer ++;
 		int index ;
+//		System.out.println("cart num: "+cart.getNumber());
+//		System.out.println("configuration.getrestrictiveNum: " +configuration.getRestrictiveNum());
 		if(cart.getNumber()<=configuration.getRestrictiveNum()) {
 //			index = countNumInTills(0, configuration.getRestrictiveTills()-1);
 			index =findTill2Put(Role.restrictive, cart.getNumber());
+//			System.out.println("index = "+index);
 		}
 		else {
 //			index = countNumInTills(configuration.getRestrictiveTills(), containers.size()-1);
@@ -56,28 +59,29 @@ public class Producer implements /*Runnable*/ Callable<Integer>{
 	 * Count num of carts in each Till,
 	 * find till contains minumum tills.
 	 */
-	public int countNumInTills(int start, int end) {
-		int numOfCarts = 200;
-		int index=0;
-		if(containers.get(end).getList().size()==configuration.getSizeOfEachTill()) {
-			return -1;
-		}
-		for(int i=start;i<=end;i++) {
-			if(containers.get(i).getTillStatus()==TillStatus.opening && containers.get(i).getList().size()<numOfCarts) {
-				numOfCarts = containers.get(i).getList().size();
-				index=i;
-			}
-			
-//			System.out.println("size of container "+i+" is"+containers.get(i).getList().size());
-		}
-//		System.out.println("index="+index);
-		return index;
-	}
+//	public int countNumInTills(int start, int end) {
+//		int numOfCarts = 200;
+//		int index=0;
+//		if(containers.get(end).getList().size()==configuration.getSizeOfEachTill()) {
+//			return -1;
+//		}
+//		for(int i=start;i<=end;i++) {
+//			if(containers.get(i).getTillStatus()==TillStatus.opening && containers.get(i).getList().size()<numOfCarts) {
+//				numOfCarts = containers.get(i).getList().size();
+//				index=i;
+//			}
+//			
+////			System.out.println("size of container "+i+" is"+containers.get(i).getList().size());
+//		}
+////		System.out.println("index="+index);
+//		return index;
+//	}
 	
 	public int findTill2Put(Role role,int num) {
 		int index=0;
 		int min=200;
 		for(int i=0;i<configuration.getMaxiumOfTill();i++) {
+			System.out.println("container "+i+" statue: "+containers.get(i).getTillStatus()+" role: "+containers.get(i).getRole());
 			if(containers.get(i).getTillStatus()==TillStatus.opening  && role==containers.get(i).getRole()) {
 				if(min>containers.get(i).getList().size()) {
 //					System.out.println("num = "+num+"");
@@ -98,7 +102,7 @@ public class Producer implements /*Runnable*/ Callable<Integer>{
 			return -1;
 		}
 		else{
-			System.out.println("role: "+ role+ " index = "+index+" num = " +num);
+//			System.out.println("index :"+ index);
 			return index;
 		}
 	}

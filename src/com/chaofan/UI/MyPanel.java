@@ -88,15 +88,18 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 		for(int i=0;i<configuration.getRestrictiveTills();i++) {
 			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, Role.restrictive);
 			containers.get(i).setRole(Role.restrictive);
+			containers.get(i).setTillStatus(TillStatus.opening);
 			consumers.add(consumer);
 		}
 		for(int i=configuration.getRestrictiveTills();i<configuration.getInitTills();i++) {
 			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, Role.general);
 			containers.get(i).setRole(Role.general);
+			containers.get(i).setTillStatus(TillStatus.opening);
 			consumers.add(consumer);
 		}
 		for(int i=configuration.getInitTills(); i<configuration.getMaxiumOfTill(); i++) {
 			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.closing);
+			containers.get(i).setTillStatus(TillStatus.closing);
 			consumers.add(consumer);
 		}
 			
@@ -113,7 +116,7 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 			}
 		}
 		
-//		service.execute(dc);
+		service.execute(dc);
 	}
 	
 	public void addContainers() {
@@ -198,7 +201,7 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 			this.repaint();
 //			System.out.println("paint");
 			try {
-				TimeUnit.MILLISECONDS.sleep(150);
+				TimeUnit.MILLISECONDS.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
