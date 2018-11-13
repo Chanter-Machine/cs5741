@@ -13,4 +13,5 @@ public interface Container {
 	public void setTillStatus(TillStatus tillStatus);
 	public Role getRole();
 	public void setRole(Role role);
+	public int getTotalProducts();
 }

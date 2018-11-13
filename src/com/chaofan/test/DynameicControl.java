@@ -108,16 +108,19 @@ public class DynameicControl implements Runnable {
 	public int openTill(Role role) {
 		System.out.println("A "+role+" need to be open");
 		for(int i=0; i<configuration.getMaxiumOfTill();i++) {
-			if(containers.get(i).getTillStatus()==TillStatus.closing 
+			System.out.println("index = "+i+" till status: "+containers.get(i).getTillStatus()+" list size: "+containers.get(i).getList().size()+" consumer status: "+consumers.get(i).isSwitch_on());
+			if(containers.get(i).getTillStatus()!=TillStatus.opening
 					&& containers.get(i).getList().size() ==0
-					&& consumers.get(i).isSwitch_on()==false) {
+					&& consumers.get(i).isSwitch_on()==false){
 				consumers.get(i).setSwitch_on(true);
 				containers.get(i).setRole(role);
 				containers.get(i).setTillStatus(TillStatus.opening);
+//				System.out.println(containers.get(i).getTillStatus());
 				if(role==Role.restrictive) {
 					configuration.setRestrictiveTills(configuration.getRestrictiveTills()+1);
 				}
 				timeConsumationOfConsumer.add(service.submit(consumers.get(i)));
+
 				return 0;
 			}
 		}
@@ -198,7 +201,7 @@ public class DynameicControl implements Runnable {
 		averageRestrative = getAverage(numOfRestrativeTIlls, numOfCartInRestrativeTills);
 		averageCommon = getAverage(numOfGeneralTills, numOfCartInCommonTills);
 		if(numOfRestrativeTIlls>1 && averageRestrative<= configuration.getSizeOfEachTill()/2) {
-			System.out.println(numOfRestrativeTIlls);
+//			System.out.println(numOfRestrativeTIlls);
 			closeTill(Role.restrictive);
 //			return 0;
 		}

@@ -64,7 +64,7 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 		this.setLayout(null);
 		loadResource() ;
 		this.configuration = configuration;
-		service = Executors.newFixedThreadPool(configuration.getMaxiumOfTill()+2);
+		service = Executors.newFixedThreadPool(configuration.getMaxiumOfTill()+10);
 		timeConsumationOfConsumer = new Vector<Future<Long>>();
 		containers = new Vector<Container>();
 		addContainers();
@@ -86,19 +86,20 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 	
 	public void addConsumer() {
 		for(int i=0;i<configuration.getRestrictiveTills();i++) {
-			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, Role.restrictive);
+			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, true);
 			containers.get(i).setRole(Role.restrictive);
 			containers.get(i).setTillStatus(TillStatus.opening);
 			consumers.add(consumer);
 		}
 		for(int i=configuration.getRestrictiveTills();i<configuration.getInitTills();i++) {
-			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, Role.general);
+			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, true);
 			containers.get(i).setRole(Role.general);
 			containers.get(i).setTillStatus(TillStatus.opening);
 			consumers.add(consumer);
 		}
 		for(int i=configuration.getInitTills(); i<configuration.getMaxiumOfTill(); i++) {
-			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.closing);
+			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.closing, false);
+			containers.get(i).setRole(Role.general);
 			containers.get(i).setTillStatus(TillStatus.closing);
 			consumers.add(consumer);
 		}
@@ -128,7 +129,7 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 	public void drwaCart(Graphics g) {
 //		g.drawImage(cartImage, 80, 30, 60, 60, this);
 		Cart cart;
-		for(int i=0;i<this.configuration.getInitTills();i++) {
+		for(int i=0;i<this.configuration.getMaxiumOfTill();i++) {
 			
 			int temp = containers.get(i).getList().size();
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
@@ -159,10 +160,38 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 	
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
-		g.fillRect(0,0,800,700);
+		g.fillRect(0,0,1000,700);
 		this.drwaCart(g);
 		drawTill(g);
+		drawInfo(g);
 //		System.out.println("Test");
+	}
+	
+	public void drawInfo(Graphics g) {
+		g.setColor(Color.RED);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 22));
+		long totalWatiTime = 0;
+		
+		g.drawString("Total customer:", 600, 30);
+		g.drawString(producer.getSumOfCustomer()+"", 900, 30);
+		
+		g.drawString("Lost customer:", 600, 60);
+		g.drawString(producer.getSumOfLostCustomer()+"", 900, 60);
+		
+		g.drawString("Total Products proceed:", 600, 90);
+		int totalProducts = 0;
+		for(int i=0;i<configuration.getMaxiumOfTill();i++) {
+			totalProducts += containers.get(i).getTotalProducts();
+			totalWatiTime += consumers.get(i).getTotalWaitTIme();
+		}
+		g.drawString(totalProducts+"", 900, 90);
+		
+		g.drawString("Average customer wait time:    "+(totalWatiTime/(producer.getSumOfCustomer()-producer.getSumOfLostCustomer())), 600, 120);
+		
+		
+		g.drawString("Average checkout utilisation:    ", 600, 150);
+		g.drawString("Average products per trolley:    "+producer.getTotalProducts()/producer.getSumOfCustomer(), 600, 180);
+
 	}
 	
 	public void shutdownAll() {

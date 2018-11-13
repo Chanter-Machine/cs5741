@@ -18,6 +18,8 @@ public class ContainerTest3 implements Container {
 	Condition notEmpty;
 	TillStatus tillStatus;
 	Role role;
+	int totalProducts;
+	
 	public ContainerTest3(int size) {
 		li = new ArrayList<Cart>(size);
 		list = Collections.synchronizedList(li);
@@ -25,8 +27,13 @@ public class ContainerTest3 implements Container {
 		notEmpty = lock.newCondition();
 		notFull = lock.newCondition();
 //		tillStatus = TillStatus.opening;
+		totalProducts = 0;
 	}
 	
+	public int getTotalProducts() {
+		return totalProducts;
+	}
+
 	public Role getRole() {
 		return role;
 	}
@@ -122,8 +129,9 @@ public class ContainerTest3 implements Container {
 //		System.out.println("consuemr get the lock");
 		notFull.signalAll();
 		cart = list.get(0);
+		cart.setEndTime(System.currentTimeMillis());
 		lock.unlock();
-
+		int tempCartNum = cart.getNumber();
 		if (cart != null) {
 			int tmpNum = list.get(0).getNumber();
 			while (tmpNum > 0) {
@@ -135,12 +143,12 @@ public class ContainerTest3 implements Container {
 				}
 			}
 		}
-
+		totalProducts+=tempCartNum;
 		lock.lock();
 		list.remove(0);
 		notFull.signalAll();
 		lock.unlock();
-
+//		System.out.println(cart.getNumber());
 		return cart;
 	}
 
