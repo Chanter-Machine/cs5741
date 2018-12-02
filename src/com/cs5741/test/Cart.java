@@ -1,4 +1,4 @@
-package com.chaofan.test;
+package com.cs5741.test;
 
 import utils.NumGeneration;
 

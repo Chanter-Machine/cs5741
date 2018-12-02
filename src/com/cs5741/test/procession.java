@@ -1,4 +1,4 @@
-package com.chaofan.test;
+package com.cs5741.test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ContainerTest3 implements Container {
+public class procession implements Container {
 
 	private List<Cart> li;
 	private List<Cart> list;
@@ -20,7 +20,7 @@ public class ContainerTest3 implements Container {
 	Role role;
 	int totalProducts;
 	
-	public ContainerTest3(int size) {
+	public procession(int size) {
 		li = new ArrayList<Cart>(size);
 		list = Collections.synchronizedList(li);
 		this.size = size;

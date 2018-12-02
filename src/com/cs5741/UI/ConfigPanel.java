@@ -1,4 +1,4 @@
-package com.chaofan.UI;
+package com.cs5741.UI;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;

@@ -1,12 +1,12 @@
-package com.chaofan.test;
+package com.cs5741.test;
 
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import com.chaofan.UI.Configuration;
+import com.cs5741.UI.Configuration;
 
-public class Producer implements /* Runnable */ Callable<Integer> {
+public class CustomerGenerator implements /* Runnable */ Callable<Integer> {
 	Vector<Container> containers;
 	int size, id;
 	volatile boolean switch_on;
@@ -14,7 +14,7 @@ public class Producer implements /* Runnable */ Callable<Integer> {
 	Integer sumOfCustomer, sumOfLostCustomer;
 	int totalProducts;
 
-	public Producer(Vector<Container> cts, int id, Configuration configuration) {
+	public CustomerGenerator(Vector<Container> cts, int id, Configuration configuration) {
 		containers = cts;
 		this.id = id;
 		switch_on = true;

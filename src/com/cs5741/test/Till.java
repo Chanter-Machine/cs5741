@@ -1,9 +1,9 @@
-package com.chaofan.test;
+package com.cs5741.test;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-public class Consumer implements /* Runnable, */ Callable<Long> {
+public class Till implements /* Runnable, */ Callable<Long> {
 	Container container;
 	int id, size;
 	volatile boolean switch_on;
@@ -12,7 +12,7 @@ public class Consumer implements /* Runnable, */ Callable<Long> {
 	long TotalWaitTIme;
 //	Role role;
 
-	public Consumer(Container ct, int id, TillStatus tillStatus, Role role) {
+	public Till(Container ct, int id, TillStatus tillStatus, Role role) {
 		container = ct;
 		this.id = id;
 		switch_on = true;
@@ -21,7 +21,7 @@ public class Consumer implements /* Runnable, */ Callable<Long> {
 		TotalWaitTIme = 0;
 	}
 
-	public Consumer(Container ct, int id, TillStatus tillStatus, boolean switch_on) {
+	public Till(Container ct, int id, TillStatus tillStatus, boolean switch_on) {
 		container = ct;
 		this.id = id;
 		this.switch_on = switch_on;

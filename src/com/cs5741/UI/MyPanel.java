@@ -1,4 +1,4 @@
-package com.chaofan.UI;
+package com.cs5741.UI;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -23,14 +23,14 @@ import javax.swing.JPanel;
 
 import org.omg.CORBA.PUBLIC_MEMBER;
 
-import com.chaofan.test.Cart;
-import com.chaofan.test.Consumer;
-import com.chaofan.test.Container;
-import com.chaofan.test.ContainerTest3;
-import com.chaofan.test.DynameicControl;
-import com.chaofan.test.Producer;
-import com.chaofan.test.Role;
-import com.chaofan.test.TillStatus;
+import com.cs5741.test.Cart;
+import com.cs5741.test.Till;
+import com.cs5741.test.Container;
+import com.cs5741.test.procession;
+import com.cs5741.test.DynameicControl;
+import com.cs5741.test.CustomerGenerator;
+import com.cs5741.test.Role;
+import com.cs5741.test.TillStatus;
 
 public class MyPanel extends JPanel implements Runnable, ActionListener{
 	
@@ -40,9 +40,9 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 	ExecutorService service;
 	Configuration configuration;
 
-	Vector<Consumer> consumers;
+	Vector<Till> consumers;
 	Vector<Container> containers;
-	Producer producer;
+	CustomerGenerator producer;
 	DynameicControl dc;
 	
 	Vector<Future<Long>> timeConsumationOfConsumer;
@@ -64,12 +64,12 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 		this.setLayout(null);
 		loadResource() ;
 		this.configuration = configuration;
-		service = Executors.newFixedThreadPool(configuration.getMaxiumOfTill()+10);
+		service = Executors.newFixedThreadPool(configuration.getMaxiumOfTill()+2);
 		timeConsumationOfConsumer = new Vector<Future<Long>>();
 		containers = new Vector<Container>();
 		addContainers();
-		producer = new Producer(containers, 1, configuration);
-		consumers = new Vector<Consumer>(configuration.getMaxiumOfTill());
+		producer = new CustomerGenerator(containers, 1, configuration);
+		consumers = new Vector<Till>(configuration.getMaxiumOfTill());
 		addConsumer();
 //		new Thread(producer).start();
 		dc = new DynameicControl(containers, configuration, service, timeConsumationOfConsumer, consumers);
@@ -86,19 +86,19 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 	
 	public void addConsumer() {
 		for(int i=0;i<configuration.getRestrictiveTills();i++) {
-			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, true);
+			Till consumer = new Till(containers.get(i), i, TillStatus.opening, true);
 			containers.get(i).setRole(Role.restrictive);
 			containers.get(i).setTillStatus(TillStatus.opening);
 			consumers.add(consumer);
 		}
 		for(int i=configuration.getRestrictiveTills();i<configuration.getInitTills();i++) {
-			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.opening, true);
+			Till consumer = new Till(containers.get(i), i, TillStatus.opening, true);
 			containers.get(i).setRole(Role.general);
 			containers.get(i).setTillStatus(TillStatus.opening);
 			consumers.add(consumer);
 		}
 		for(int i=configuration.getInitTills(); i<configuration.getMaxiumOfTill(); i++) {
-			Consumer consumer = new Consumer(containers.get(i), i, TillStatus.closing, false);
+			Till consumer = new Till(containers.get(i), i, TillStatus.closing, false);
 			containers.get(i).setRole(Role.general);
 			containers.get(i).setTillStatus(TillStatus.closing);
 			consumers.add(consumer);
@@ -122,7 +122,7 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 	
 	public void addContainers() {
 		for(int i=0;i<configuration.getMaxiumOfTill();i++) {
-			containers.add(new ContainerTest3(configuration.getSizeOfEachTill()));
+			containers.add(new procession(configuration.getSizeOfEachTill()));
 		}
 	}
 	
@@ -189,24 +189,24 @@ public class MyPanel extends JPanel implements Runnable, ActionListener{
 		g.drawString("Average customer wait time:    "+(totalWatiTime/(producer.getSumOfCustomer()-producer.getSumOfLostCustomer())), 600, 120);
 		
 		
-		g.drawString("Average checkout utilisation:    ", 600, 150);
-		g.drawString("Average products per trolley:    "+producer.getTotalProducts()/producer.getSumOfCustomer(), 600, 180);
+//		g.drawString("Average checkout utilisation:    ", 600, 150);
+		g.drawString("Average products per trolley:    "+producer.getTotalProducts()/producer.getSumOfCustomer(), 600, 150);
 
 	}
 	
 	public void shutdownAll() {
 		producer.setSwitch_on(false);
 		
-		for (Consumer consumer : consumers) {
+		for (Till consumer : consumers) {
 			consumer.setSwitch_on(false);
 		}
 	}
 	
-	public Vector<Consumer> getConsumers() {
+	public Vector<Till> getConsumers() {
 		return consumers;
 	}
 
-	public Producer getProducer() {
+	public CustomerGenerator getProducer() {
 		return producer;
 	}
 

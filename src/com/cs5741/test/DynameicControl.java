@@ -1,11 +1,11 @@
-package com.chaofan.test;
+package com.cs5741.test;
 
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import com.chaofan.UI.Configuration;
+import com.cs5741.UI.Configuration;
 
 public class DynameicControl implements Runnable {
 
@@ -15,11 +15,11 @@ public class DynameicControl implements Runnable {
 	int numOfCartInRestrativeTills;
 	int numOfCartInCommonTills;
 	Vector<Future<Long>> timeConsumationOfConsumer;
-	Vector<Consumer> consumers;
+	Vector<Till> consumers;
 	
 	public DynameicControl(Vector<Container> containers, Configuration configuration,
 			ExecutorService service, Vector<Future<Long>> timeConsumationOfConsumer,
-			Vector<Consumer> consumers) {
+			Vector<Till> consumers) {
 		this.containers = containers;
 		this.configuration = configuration;
 		this.service = service;
